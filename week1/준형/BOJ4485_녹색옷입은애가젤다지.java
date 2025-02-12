@@ -1,65 +1,62 @@
-package 준형;
+package algo;
 
 import java.io.*;
 import java.util.*;
 
-public class BOJ4485_녹색옷입은애가젤다지 {
+class Main { 
     static int N;
-    static int[][] cave;
+    static int[][] map;
     static int[][] dist;
-    static int[] dy = {-1, 1, 0, 0};
-    static int[] dx = {0, 0, -1, 1};
     static int problemCount = 1;
+    static int[] dy = {-1, 1, 0, 0}; 
+    static int[] dx = {0, 0, -1, 1}; 
+    
+    static void bfs(int i , int j) {
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.add(new int[] {i, j});
+        dist[i][j] = map[i][j]; 
+        
+        while (!queue.isEmpty()) {
+            int[] node = queue.poll();
+            int cy = node[0];
+            int cx = node[1];
 
-    public static void main(String[] args) throws Exception {
+            for (int d = 0; d < 4; d++) { 
+                int ny = cy + dy[d];
+                int nx = cx + dx[d];
+
+                if (0 <= ny && ny < N && 0 <= nx && nx < N) {
+                    int newRupee = dist[cy][cx] + map[ny][nx]; 
+                    if (newRupee < dist[ny][nx]) {
+                        dist[ny][nx] = newRupee;
+                        queue.add(new int[] {ny, nx});
+                    }
+                }
+            }
+        }
+    }
+
+    public static void main(String args[]) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         while (true) {
             N = Integer.parseInt(br.readLine());
-            if (N == 0) break;
+            if (N == 0) break; 
 
-            cave = new int[N][N];
+            map = new int[N][N];
             dist = new int[N][N];
 
-            for (int y = 0; y < N; y++) {
+            for (int i = 0; i < N; i++) {
                 st = new StringTokenizer(br.readLine());
-                for (int x = 0; x < N; x++) {
-                    cave[y][x] = Integer.parseInt(st.nextToken());
-                    dist[y][x] = Integer.MAX_VALUE;
+                for (int j = 0; j < N; j++) {
+                    map[i][j] = Integer.parseInt(st.nextToken());
+                    dist[i][j] = Integer.MAX_VALUE; 
                 }
             }
 
-            // BFS 실행
-            int result = bfs();
-            System.out.println("Problem " + (problemCount++) + ": " + result);
+            bfs(0, 0);
+            System.out.println("Problem " + (problemCount++) + ": " + dist[N-1][N-1]);
         }
-    }
-
-    static int bfs() {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{0, 0, cave[0][0]});
-        dist[0][0] = cave[0][0];
-
-        while (!queue.isEmpty()) {
-            int[] node = queue.poll();
-            int cy = node[0], cx = node[1], currentCost = node[2];
-
-            for (int d = 0; d < 4; d++) {
-                int ny = cy + dy[d];
-                int nx = cx + dx[d];
-
-                if (ny < 0 || nx < 0 || ny >= N || nx >= N) continue;
-
-                int newCost = currentCost + cave[ny][nx];
-
-                if (newCost < dist[ny][nx]) {
-                    dist[ny][nx] = newCost;
-                    queue.add(new int[]{ny, nx, newCost});
-                }
-            }
-        }
-
-        return dist[N - 1][N - 1]; // 도착점의 최소 비용 반환
     }
 }
