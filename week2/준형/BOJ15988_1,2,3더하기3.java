@@ -1,77 +1,41 @@
 import java.io.*;
 import java.util.*;
 
-class Main {
-
-    static class Node {
-        Node left, right;
-        char data;
-
-        Node(char data) {
-            this.data = data;
-        }
-    }
-
-    static void preorder(Node node) {
-        if(node == null) return;
-        System.out.print(node.data);
-
-        preorder(node.left);
-        preorder(node.right);
-    }
-
-    static void inorder(Node node) {
-        if (node == null) return;
-        inorder(node.left);
-        System.out.print(node.data);
-        inorder(node.right);
-    }
-
-    static void postorder(Node node) {
-        if (node == null) return;
-        postorder(node.left);
-        postorder(node.right);
-        System.out.print(node.data);
-    }
-
-    static Map<Character, Node> tree = new HashMap<>();
-
-    public static void main(String args[]) throws Exception {
-        // 전위 순회 : 루트 -> 왼쪽 -> 오른쪽
-        // 중위 순회 : 왼쪽 -> 루트 -> 오른쪽
-        // 후위 순회 : 왼쪽 -> 오른쪽 -> 루트
-
+public class Main {
+    static final int MOD = 1000000009;
+    
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        StringTokenizer st;
-        for (int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            char root = st.nextToken().charAt(0);
-            char left = st.nextToken().charAt(0);
-            char right = st.nextToken().charAt(0);
-
-            tree.putIfAbsent(root, new Node(root));
-
-            if (left != '.' ) {
-                tree.putIfAbsent(left, new Node(left));
-                tree.get(root).left = tree.get(left);
-            }
-
-            if (right != '.') {
-                tree.putIfAbsent(right, new Node(right));
-                tree.get(root).right = tree.get(right);
+        
+        int T = Integer.parseInt(br.readLine());
+        int maxN = 0;
+        ArrayList<Integer> testCases = new ArrayList<>();
+        
+        // 모든 테스트 케이스를 읽고 최대 n 값을 찾기
+        for (int i = 0; i < T; i++) {
+            int n = Integer.parseInt(br.readLine());
+            testCases.add(n);
+            if(n > maxN) {
+                maxN = n;
             }
         }
-
-        Node root = tree.get('A');
-
-        preorder(root);
-        System.out.println();
-
-        inorder(root);
-        System.out.println();
-
-        postorder(root);
-        System.out.println();
+        
+        // dp 배열 초기화: dp[i] = i를 1, 2, 3의 합으로 나타내는 방법의 수
+        int[] dp = new int[maxN + 1];
+        dp[0] = 1;
+        if(maxN >= 1) dp[1] = 1;
+        if(maxN >= 2) dp[2] = 2;
+        
+        // 점화식: dp[i] = dp[i-1] + dp[i-2] + dp[i-3]
+        for (int i = 3; i <= maxN; i++) {
+        	dp[i] = (((dp[i-1] + dp[i-2]) % MOD) + dp[i-3]) % MOD;
+        }
+        
+        // 각 테스트 케이스에 대해 결과 출력
+        StringBuilder sb = new StringBuilder();
+        for (int n : testCases) {
+            sb.append(dp[n]).append("\n");
+        }
+        System.out.print(sb.toString());
     }
 }
