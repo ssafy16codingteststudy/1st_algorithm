@@ -23,7 +23,7 @@ public class BOJ12865_평범한배낭 {
 
         W = new int[N + 1];
         V = new int[N + 1];
-        for (int i = 1; i <= N ; i++) {
+        for (int i = 1; i <= N; i++) {
             st = new StringTokenizer(br.readLine());
             W[i] = Integer.parseInt(st.nextToken());
             V[i] = Integer.parseInt(st.nextToken());
@@ -41,4 +41,5 @@ public class BOJ12865_평범한배낭 {
 
         // 가치 최대값
         System.out.println(dp[N][K]);
+    }
 }
