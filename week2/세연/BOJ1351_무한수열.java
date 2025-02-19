@@ -14,7 +14,7 @@ public class Main {
         System.out.println(getVal(N,P,Q));
     }
     static long getVal(long idx, long P, long Q){
-        if (!dp.containsKey(idx)) {
+        if (!dp.containsKey(idx)) { // DP에 값이 없을 경우 재귀적으로 해당 DP 값 구하기
             dp.put(idx, getVal(idx/P,P,Q) + getVal(idx/Q,P,Q));
         }
         return dp.get(idx);
