@@ -3,55 +3,92 @@ import java.util.*;
 
 public class Main {
 
-	private static long N;
+	static class Node {
+		int num;
+		Node parent;
+		int ga; //부모와의 가중치
+		List<Node> children = new ArrayList<>();
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringBuffer sb = new StringBuffer();
-		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		N = Long.parseLong(st.nextToken());
-
-		long answer[][] = fib(N - 1);
-		sb.append(answer[0][0]);
-		bw.write(sb.toString());
-		bw.flush();
-
-		bw.close();
-		br.close();
-	}
-
-  // B형 특강에서 배운 행렬을 통해 피보나치 수열 구하기를 적용
-  // 관련 설명: https://ohgym.tistory.com/1
-	private static long[][] fib(long cur) {
-		if (cur == 0 || cur == 1) {
-			return new long[][] { { 1, 1 }, { 1, 0 } };
+		Node(int num){
+			this.num = num;
 		}
 
-		long[][] temp = fib(cur / 2);
+		void setParent(Node node, int ga) {
+			parent = node;
+			this.ga = ga;
+		}
 
-		if (cur % 2 == 0) {
-			return calRC(temp, temp);
-		} else {
-			return calRC(temp, calRC(temp, new long[][] { { 1, 1 }, { 1, 0 } }));
+		void addChild(Node node) {
+			children.add(node);
 		}
 	}
 
-	private static long[][] calRC(long[][] a, long[][] b) {
-		long[][] arr = new long[2][2];
+	static int n;
+	static Node[] nodes;
+	static int maxLength;
+	static int maxLengthNode;
+	static boolean[] visited;
 
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				for (int k = 0; k < 2; k++) {
-					arr[i][j] += a[i][k] * b[k][j];
-				}
-        // 합을 구한 다음에 나머지 연산해주는 거 주의... ^^
-				arr[i][j] %= 1_000_000_007;
+	static void dfs(Node node, int total) {
+
+		visited[node.num] = true;
+
+		if (node.children.isEmpty()) {
+			if (total > maxLength) {
+				maxLength = Math.max(total, maxLength);
+				maxLengthNode = node.num;
 			}
 		}
 
-		return arr;
+		for (Node n : node.children) {
+			if (!visited[n.num]) {
+				dfs(n, total + n.ga);
+			}
+		}
+
+		if (node.parent != null) {
+			if (!visited[node.parent.num]) {
+				dfs(node.parent, total + node.ga);
+			}
+		}
 	}
 
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+
+		// init
+		n = Integer.parseInt(br.readLine());
+
+		nodes = new Node[n + 1];
+
+		for (int i = 0; i < n + 1; i++) {
+			nodes[i] = new Node(i);
+		}
+
+		for (int i = 0; i < n - 1; i++ ) {
+			st = new StringTokenizer(br.readLine());
+
+			int parent = Integer.parseInt(st.nextToken());
+			int child = Integer.parseInt(st.nextToken());
+			int ga = Integer.parseInt(st.nextToken());
+
+			Node pNode = nodes[parent];
+			Node cNode = nodes[child];
+
+			pNode.addChild(cNode);
+			cNode.setParent(pNode, ga);
+		}
+
+		maxLength = 0;
+		maxLengthNode = 1;
+
+		visited = new boolean[n + 1];
+		dfs(nodes[1], 0);
+
+		visited = new boolean[n + 1];
+		dfs(nodes[maxLengthNode], 0);
+
+		System.out.println(maxLength);
+	}
 }
