@@ -1,0 +1,94 @@
+import java.util.*;
+import java.io.*;
+
+class Arr {
+	int value;
+	int index;
+
+	Arr(int value, int index) {
+		this.value = value;
+		this.index = index;
+	}
+}
+
+class Compare1 implements Comparator<Arr> {
+
+	@Override
+	public int compare(Arr o1, Arr o2) {
+		if (o1.value == o2.value) {
+			return o1.index - o2.index;
+		}
+		return o1.value - o2.value;
+	}
+}
+
+class Compare2 implements Comparator<Arr> {
+	@Override
+	public int compare(Arr o1, Arr o2) {
+		if (o1.value == o2.value) {
+			return o2.index - o1.index;
+		}
+		return o1.value - o2.value;
+	}
+}
+
+public class Main {
+
+	private static int N;
+	private static int[] arr;
+	private static long[] prefix;
+	private static Arr[] arrs, arrs2;
+	private static Map<Long, Integer> map = new HashMap<>();
+	private static Set<Integer> set = new HashSet<>();
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringBuilder sb = new StringBuilder();
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		N = Integer.parseInt(st.nextToken());
+		arr = new int[N + 1];
+		prefix = new long[N + 1];
+
+		arrs = new Arr[N];
+		arrs2 = new Arr[N];
+
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+			prefix[i + 1] = prefix[i] + arr[i];
+
+			arrs[i] = new Arr(arr[i], i);
+			arrs2[i] = new Arr(arr[i], i);
+		}
+
+		Arrays.sort(arrs, new Compare1());
+		Arrays.sort(arrs2, new Compare1());
+
+		long answer = 0;
+		for (int i = 0; i < N; i++) {
+			int idx = -(Arrays.binarySearch(arrs, new Arr(arr[i], -1), new Compare1()) + 1);
+			int idx2 = -(Arrays.binarySearch(arrs2, new Arr(arr[i], -1), new Compare2()) + 1) - 1;
+
+			long sum = prefix[arrs2[idx2].index + 1] - prefix[arrs[idx].index];
+			if (!map.containsKey(sum)) {
+				map.put(sum, 1);
+				set.add(arr[i]);
+				answer = Math.max(answer, sum);
+			} else if (!set.contains(arr[i])) {
+				map.put(sum, map.get(sum) + 1);
+				set.add(arr[i]);
+			}
+
+		}
+
+		sb.append(answer).append(" ").append(map.get(answer));
+		bw.write(sb.toString());
+		bw.flush();
+
+		bw.close();
+		br.close();
+	}
+
+}
