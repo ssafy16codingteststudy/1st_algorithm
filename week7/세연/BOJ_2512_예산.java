@@ -1,3 +1,5 @@
+package week7.세연;
+
 import java.util.*;
 import java.io.*;
 
