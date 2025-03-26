@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+// standards[i] >= target를 처음으로 만족하는 i 찾기
 public class BOJ19637_IF문좀대신써줘 {
 
     private static int N, M;
