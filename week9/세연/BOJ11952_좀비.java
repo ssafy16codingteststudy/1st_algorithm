@@ -44,7 +44,7 @@ public class Main {
             map[b].add(a);
         }
 
-        // 위험 도시 마킹
+        // 도시 상태 확인 -> 위험 도시 마킹
         while (!queue.isEmpty()) {
             int[] tmp = queue.poll();
             int city = tmp[0], dist = tmp[1];

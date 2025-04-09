@@ -75,7 +75,7 @@ public class Main {
             return Math.min(intervalMin(start, mid, 2*idx, left, right), intervalMin(mid+1, end, 2*idx+1, left, right));
         }
 
-        Node intervalSearch(int start, int end, int idx, int left, int right) {
+        Node intervalSearch(int start, int end, int idx, int left, int right) { // 한번에 다 찾는 함수 -> 값 반환할 때 Node 만드는데 시간이 오래 걸려서 더 느림
             if (end < left || right < start) return new Node(Integer.MAX_VALUE, Integer.MIN_VALUE);
             else if (left <= start && end <= right) return tree[idx];
             int mid = (start + end) / 2;
