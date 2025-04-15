@@ -3,7 +3,7 @@ package week10.일우;
 import java.io.*;
 import java.util.*;
 
-public class BOJ25289_지각하면안돼 {
+public class BOJ25289_가장긴등차부분수열 {
 
     public static void main(String[] args) throws IOException {
         // 입력 읽기
