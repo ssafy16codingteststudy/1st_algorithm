@@ -1,0 +1,62 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        int N = Integer.parseInt(br.readLine()); // 도시 수
+
+        int[][] graph = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < N; j++) {
+                graph[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        // 최단 거리가 아닌 경우 -1 출력하기
+        for (int k = 0; k < N; k++) {
+            for (int i = 0; i < N; i++) {
+                if (i == k) {
+                    continue;
+                }
+                for (int j = 0; j < N; j++) {
+                    if (j == k || j == i) {
+                        continue;
+                    }
+                    if (graph[i][j] > graph[i][k] + graph[k][j]) {
+                        System.out.println(-1);
+                        return;
+                    }
+                }
+            }
+        }
+
+        // 필요한 간선 가중치 구하기
+        int total = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = i + 1; j < N; j++) {
+                boolean isUnnecessary = false;
+                for (int k = 0; k < N; k++) {
+                    if (k == i || k == j) {
+                        continue;
+                    }
+                    if (graph[i][j] == graph[i][k] + graph[k][j]) {
+                        isUnnecessary = true;
+                        break;
+                    }
+                }
+                if (!isUnnecessary) {
+                    total += graph[i][j];
+                }
+            }
+        }
+
+        System.out.println(total);
+    }
+}
