@@ -3,7 +3,7 @@ package week11.건휘;
 import java.io.*;
 import java.util.*;
 
-public class BOJ_2470 {
+public class BOJ2470_두용액 {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
