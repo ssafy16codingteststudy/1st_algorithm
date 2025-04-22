@@ -23,7 +23,7 @@ public class BOJ1107_리모컨 {
 		
 		int result = Math.abs(n - 100); // +, - 만 사용한 경우
 		
-		for(int i = 0; i <= 999999; i++) {
+		for(int i = 0; i <= 500000; i++) {
 			int len = check(i);
 			if(len > 0) {	// 번호를 누를 수 있다면,
 				int press = len + Math.abs(i - n);	// 숫자 누르기 + 이동 횟수
