@@ -17,7 +17,7 @@ public class Main {
             dp[day][0] = (dp[day - 1][0] + dp[day - 1][1] + dp[day - 1][2]) % MOD;
             dp[day][1] = dp[day - 1][0];
             dp[day][2] = dp[day - 1][1];
-            dp[day][3] = (dp[day - 1][3] + dp[day - 1][4] + dp[day - 1][5]) % MOD + (dp[day][3] + dp[day - 1][0] + dp[day - 1][1] + dp[day - 1][2]) % MOD;
+            dp[day][3] = (dp[day - 1][3] + dp[day - 1][4] + dp[day - 1][5]) % MOD + (dp[day - 1][0] + dp[day - 1][1] + dp[day - 1][2]) % MOD;
             dp[day][4] = dp[day - 1][3];
             dp[day][5] = dp[day - 1][4];
         }
